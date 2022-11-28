@@ -17,6 +17,7 @@ namespace MovieReviewAPI.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserReviews>().HasAlternateKey(c => new { c.ShowId, c.UserId });
+            modelBuilder.Entity<Users>().HasAlternateKey(c => new { c.Username });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

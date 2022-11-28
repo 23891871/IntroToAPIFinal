@@ -86,20 +86,25 @@ namespace MovieReviewAPI.Controllers
         {
             users.NumOfReviews = 0;
 
-            _context.UserInfo.Add(users);
+            
             try
             {
+                _context.UserInfo.Add(users);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (UsersExists(users.UserId))
+                if (UsersExists(users.UserId, users.Username))
                 {
                     return Conflict(new Response(409));
                 }
+                else
+                {
+                    throw;
+                }
             }
 
-            return CreatedAtAction("GetUserReviews", new { id = users.UserId }, new Response(201, "User Review", users));
+            return CreatedAtAction("GetUsers", new { id = users.UserId }, new Response(201, "User ", users));
         }
 
         // DELETE: api/Users/5
@@ -146,9 +151,9 @@ namespace MovieReviewAPI.Controllers
             return NoContent();
         }
 
-        private bool UsersExists(int id)
+        private bool UsersExists(int id, string username = "")
         {
-            return _context.UserInfo.Any(e => e.UserId == id);
+            return _context.UserInfo.Any(e => e.UserId == id || e.Username == username);
         }
     }
 }
