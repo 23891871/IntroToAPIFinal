@@ -46,7 +46,7 @@ namespace MovieReviewAPI.Controllers
                 case "shows":
                     {
                         var shows = await _context.UserReviews.Where(c => c.ShowId == id).ToListAsync();
-                        if (shows != null)
+                        if (shows != null && shows.Count > 0)
                         {
                             return Ok(new Response(200, "UserReviews of ShowId " + id, shows));
                         }
@@ -55,7 +55,7 @@ namespace MovieReviewAPI.Controllers
                 case "users":
                     {
                         var users = await _context.UserReviews.Where(c => c.UserId == id).ToListAsync();
-                        if (users != null)
+                        if (users != null && users.Count > 0)
                         {
                             return Ok(new Response(200, "UserReviews of UserId " + id, users));
                         }
