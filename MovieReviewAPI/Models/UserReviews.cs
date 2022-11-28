@@ -3,9 +3,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 namespace MovieReviewAPI.Models
 {
-    [Keyless]
     public class UserReviews
     {
+        [Key]
         public int ReviewId { get; set; }
         public int ShowId { get; set; }
         public int UserId { get; set; }

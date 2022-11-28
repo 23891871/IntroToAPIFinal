@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MycEGbnBIvDdZy0/JcjskdkDFvo7hDRzVp8mFQeOcH+nCl8c4GJehBf8m7lGjn8WVssZVDN6qym/ReLLlUf83w==",
+  "dgSpecHash": "EGGvjTeLMu3o7HXm0sg4XdmCHzqugk9oiiv7aSSRDT82mpVMltKNpJZE26JBz3BAkJTAp+N0kRKac4dYUu2+kg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\jjlui\\Source\\Repos\\IntroToAPIFinal\\MovieReviewAPI\\MovieReviewAPI.csproj",
+  "projectFilePath": "C:\\Users\\jjlui\\source\\repos\\IntroToAPIFinal\\MovieReviewAPI\\MovieReviewAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jjlui\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\jjlui\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",

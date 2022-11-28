@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jjlui\\Source\\Repos\\IntroToAPIFinal\\MovieReviewAPI\\MovieReviewAPI.csproj": {}
+    "C:\\Users\\jjlui\\source\\repos\\IntroToAPIFinal\\MovieReviewAPI\\MovieReviewAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jjlui\\Source\\Repos\\IntroToAPIFinal\\MovieReviewAPI\\MovieReviewAPI.csproj": {
+    "C:\\Users\\jjlui\\source\\repos\\IntroToAPIFinal\\MovieReviewAPI\\MovieReviewAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jjlui\\Source\\Repos\\IntroToAPIFinal\\MovieReviewAPI\\MovieReviewAPI.csproj",
+        "projectUniqueName": "C:\\Users\\jjlui\\source\\repos\\IntroToAPIFinal\\MovieReviewAPI\\MovieReviewAPI.csproj",
         "projectName": "MovieReviewAPI",
-        "projectPath": "C:\\Users\\jjlui\\Source\\Repos\\IntroToAPIFinal\\MovieReviewAPI\\MovieReviewAPI.csproj",
+        "projectPath": "C:\\Users\\jjlui\\source\\repos\\IntroToAPIFinal\\MovieReviewAPI\\MovieReviewAPI.csproj",
         "packagesPath": "C:\\Users\\jjlui\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jjlui\\Source\\Repos\\IntroToAPIFinal\\MovieReviewAPI\\obj\\",
+        "outputPath": "C:\\Users\\jjlui\\source\\repos\\IntroToAPIFinal\\MovieReviewAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

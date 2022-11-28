@@ -26,7 +26,8 @@ namespace MovieReviewAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Users>>> GetUserInfo()
         {
-            return await _context.UserInfo.ToListAsync();
+            var users = await _context.UserInfo.ToListAsync();
+            return Ok(new Response(200, "Users", users));
         }
 
         // GET: api/Users/5
@@ -37,10 +38,10 @@ namespace MovieReviewAPI.Controllers
 
             if (users == null)
             {
-                return NotFound();
+                return NotFound(new Response(404, "User of User Id " + id));
             }
 
-            return users;
+            return Ok(new Response(200, "User of UserId " + id, users));
         }
 
         // PUT: api/Users/5
@@ -50,7 +51,7 @@ namespace MovieReviewAPI.Controllers
         {
             if (id != users.UserId)
             {
-                return BadRequest();
+                return BadRequest(new Response(400));
             }
 
             
@@ -66,7 +67,7 @@ namespace MovieReviewAPI.Controllers
             {
                 if (!UsersExists(id))
                 {
-                    return NotFound();
+                    return NotFound(new Response(404, "User of UserId " + id));
                 }
                 else
                 {
@@ -86,11 +87,22 @@ namespace MovieReviewAPI.Controllers
             users.NumOfReviews = 0;
 
             _context.UserInfo.Add(users);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (UsersExists(users.UserId))
+                {
+                    return Conflict(new Response(409));
+                }
+            }
 
-            return CreatedAtAction("GetUsers", new { id = users.UserId }, users);
+            return CreatedAtAction("GetUserReviews", new { id = users.UserId }, new Response(201, "User Review", users));
         }
 
+        // Does not update AVGUserRating upon deleting a user.
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsers(int id)
@@ -98,15 +110,16 @@ namespace MovieReviewAPI.Controllers
             var users = await _context.UserInfo.FindAsync(id);
             if (users == null)
             {
-                return NotFound();
+                return NotFound(new Response(404, "User of User Id" + id));
             }
 
             // Recalculate AVGUserRating
             
             _context.UserInfo.Remove(users);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
+            // Update all Shows where the user had a review for
             var showids = await _context.UserReviews.Where(c => c.UserId == users.UserId).ToListAsync();
             if (showids.Any())
             {
@@ -116,7 +129,7 @@ namespace MovieReviewAPI.Controllers
                     var reviews = await _context.UserReviews.Where(c => c.ShowId == showid.ShowId).ToListAsync();
                     if (tvshows != null)
                     {
-                        if (reviews != null)
+                        if (reviews != null && reviews.Count != 0)
                         {
                             tvshows.AVGUserRating = reviews.Sum(c => c.UserRating) / reviews.Count;
                         }

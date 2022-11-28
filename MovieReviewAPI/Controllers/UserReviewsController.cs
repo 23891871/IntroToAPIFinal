@@ -24,7 +24,8 @@ namespace MovieReviewAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserReviews>>> GetUserReviews()
         {
-            return await _context.UserReviews.ToListAsync();
+            var userReviews = await _context.UserReviews.ToListAsync();
+            return Ok(new Response(200, "User Reviews", userReviews));
         }
 
         // Get based on ReviewId, ShowId, or UserId
@@ -37,49 +38,56 @@ namespace MovieReviewAPI.Controllers
 
             if (userReviews == null)
             {
-                return NotFound();
+                return NotFound(new Response(404, "User Review with UserId of " + id));
             }
 
-            if (type == "reviews")
+            switch (type)
             {
-                return Ok(await _context.UserReviews.Where(c => c.ReviewId == id).ToListAsync());
-                
+                case "shows":
+                    {
+                        var shows = await _context.UserReviews.Where(c => c.ShowId == id).ToListAsync();
+                        if (shows != null)
+                        {
+                            return Ok(new Response(200, "UserReviews of ShowId " + id, shows));
+                        }
+                        return NotFound(new Response(404, "UserReviews of ShowId " + id));
+                    }
+                case "users":
+                    {
+                        var users = await _context.UserReviews.Where(c => c.UserId == id).ToListAsync();
+                        if (users != null)
+                        {
+                            return Ok(new Response(200, "UserReviews of UserId " + id, users));
+                        }
+                        return NotFound(new Response(404, "UserReviews of UserId " + id));
+                    }
+                default:
+                    {
+                        return NotFound(new Response(404, "Data "));
+                    }
             }
-            else if (type == "shows")
-            {
-                return Ok(await _context.UserReviews.Where(c => c.ShowId == id).ToListAsync());
-            }
-            else if (type == "users")
-            {
-                return Ok(await _context.UserReviews.Where(c => c.UserId == id).ToListAsync());
-            }
-            return NotFound();
         }
 
-        // GET: api/UserReviews/5/5/5
-        // rid = ReviewId, sid = ShowId, uid = UserId
-        [HttpGet("{rid}/{sid}/{uid}")]
-        public async Task<ActionResult<UserReviews>> GetUserReviews(int rid, int sid, int uid)
+        // GET: api/UserReviews/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserReviews>> GetUserReviews(int id)
         {
-            var userReviews = await _context.UserReviews.FindAsync(rid, sid, uid);
-
-            if (userReviews == null)
+            var reviews = await _context.UserReviews.FindAsync(id);
+            if (reviews != null)
             {
-                return NotFound();
+                return Ok(new Response(200, "UserReview of ReviewId " + id, reviews));
             }
-
-            return userReviews;
+            return NotFound(new Response(404, "UserReview of ReviewId " + id));
         }
 
-        // PUT: api/UserReviews/5/5/5
-        // rid = ReviewId, sid = ShowId, uid = UserId
+        // PUT: api/UserReviews/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{rid}/{sid}/{uid}")]
-        public async Task<IActionResult> PutUserReviews(int rid, int sid, int uid, UserReviews userReviews)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUserReviews(int id, UserReviews userReviews)
         {
-            if (rid != userReviews.ReviewId)
+            if (id != userReviews.ReviewId)
             {
-                return BadRequest();
+                return BadRequest(new Response(400));
             }
 
             _context.Entry(userReviews).State = EntityState.Modified;
@@ -87,6 +95,7 @@ namespace MovieReviewAPI.Controllers
             _context.Entry(userReviews).Property(x => x.ReviewId).IsModified = false;
             _context.Entry(userReviews).Property(x => x.ShowId).IsModified = false;
 
+            // Update AVGUserRatings in TVShows
             var tvshows = await _context.TVShows.FindAsync(userReviews.ShowId);
             var reviews = await _context.UserReviews.Where(c => c.ShowId == userReviews.ShowId).ToListAsync();
             if (tvshows != null)
@@ -96,6 +105,7 @@ namespace MovieReviewAPI.Controllers
                     tvshows.AVGUserRating = reviews.Sum(c => c.UserRating) / reviews.Count;
                 }
             }
+            // End update
 
             try
             {
@@ -103,9 +113,9 @@ namespace MovieReviewAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserReviewsExists(rid, sid, uid))
+                if (!UserReviewsExists(id, userReviews.ShowId, userReviews.UserId))
                 {
-                    return NotFound();
+                    return NotFound(new Response(404, "User Review"));
                 }
                 else
                 {
@@ -123,6 +133,7 @@ namespace MovieReviewAPI.Controllers
         {
             _context.UserReviews.Add(userReviews);
 
+            // Increase number of user's reviewss
             var user = _context.UserInfo.Find(userReviews.UserId);
             if (user != null)
             {
@@ -132,6 +143,7 @@ namespace MovieReviewAPI.Controllers
             try
             {
                 _context.SaveChanges();
+                // Update AVGUserRatings in TVShows
                 var tvshows = await _context.TVShows.FindAsync(userReviews.ShowId);
                 var reviews = await _context.UserReviews.Where(c => c.ShowId == userReviews.ShowId).ToListAsync();
                 if (tvshows != null)
@@ -141,6 +153,7 @@ namespace MovieReviewAPI.Controllers
                         tvshows.AVGUserRating = (reviews.Sum(c => c.UserRating) / reviews.Count);
                     }
                 }
+                // End update
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -149,7 +162,7 @@ namespace MovieReviewAPI.Controllers
                 {
                     if (UserReviewsExists(userReviews.ReviewId, userReviews.ShowId, userReviews.UserId))
                     {
-                        return Conflict();
+                        return Conflict(new Response(409));
                     }
                     else
                     {
@@ -161,7 +174,7 @@ namespace MovieReviewAPI.Controllers
             {
                 if (UserReviewsExists(userReviews.ReviewId, userReviews.ShowId, userReviews.UserId))
                 {
-                    return Conflict();
+                    return Conflict(new Response(409));
                 }
                 else
                 {
@@ -169,21 +182,20 @@ namespace MovieReviewAPI.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUserReviews", new { id = userReviews.ReviewId }, userReviews);
+            return CreatedAtAction("GetUserReviews", new { id = userReviews.ReviewId }, new Response(201, "User Review", userReviews));
         }
 
-        // DELETE: api/UserReviews/5/5/5
-        // rid = ReviewId, sid = ShowId, uid = UserId
-        [HttpDelete("{rid}/{sid}/{uid}")]
-        public async Task<IActionResult> DeleteUserReviews(int rid, int sid, int uid)
+        // DELETE: api/UserReviews/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUserReviews(int id)
         {
-            var userReviews = await _context.UserReviews.FindAsync(rid, sid, uid);
+            var userReviews = await _context.UserReviews.FindAsync(id);
             if (userReviews == null)
             {
-                return NotFound();
+                return NotFound(new Response(404, "User Review of User Id "));
             }
 
-            var user = await _context.UserInfo.FindAsync(uid);
+            var user = await _context.UserInfo.FindAsync(userReviews.UserId);
             if (user != null)
             {
                 user.NumOfReviews -= 1;
@@ -193,8 +205,8 @@ namespace MovieReviewAPI.Controllers
 
             _context.SaveChanges();
 
-            var tvshows = await _context.TVShows.FindAsync(sid);
-            var reviews = await _context.UserReviews.Where(c => c.ShowId == sid).ToListAsync();
+            var tvshows = await _context.TVShows.FindAsync(userReviews.ShowId);
+            var reviews = await _context.UserReviews.Where(c => c.ShowId == userReviews.ShowId).ToListAsync();
             if (tvshows != null)
             {
                 if (reviews != null)
@@ -210,8 +222,7 @@ namespace MovieReviewAPI.Controllers
 
         private bool UserReviewsExists(int rid, int sid, int uid)
         {
-            
-            return _context.UserReviews.Any(e => e.ReviewId == rid && e.ShowId == sid && e.UserId == uid);
+            return _context.UserReviews.Any(e => e.ReviewId == rid || (e.ShowId == sid && e.UserId == uid));
         }
     }
 }
