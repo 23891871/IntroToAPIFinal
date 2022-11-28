@@ -85,6 +85,7 @@ namespace MovieReviewAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTVShows(int id, TVShows tVShows)
         {
+            /*
             if (id != tVShows.ShowId)
             {
                 return BadRequest();
@@ -107,8 +108,10 @@ namespace MovieReviewAPI.Controllers
                     throw;
                 }
             }
-
+            
             return NoContent();
+            */
+            return StatusCode(405, new Response(405));
         }
 
         // POST: api/TVShows
@@ -116,16 +119,20 @@ namespace MovieReviewAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<TVShows>> PostTVShows(TVShows tVShows)
         {
+            /*
             _context.TVShows.Add(tVShows);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTVShows", new { id = tVShows.ShowId }, tVShows);
+            */
+            return StatusCode(405, new Response(405));
         }
 
         // DELETE: api/TVShows/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTVShows(int id)
         {
+            /*
             var tVShows = await _context.TVShows.FindAsync(id);
             if (tVShows == null)
             {
@@ -136,6 +143,8 @@ namespace MovieReviewAPI.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+            */
+            return StatusCode(405, new Response(405));
         }
 
         private bool TVShowsExists(int id)

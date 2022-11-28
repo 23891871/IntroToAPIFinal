@@ -36,6 +36,9 @@ namespace MovieReviewAPI.Models
                 case 404:
                     statusDescription = description + " could not be found.";
                     break;
+                case 405:
+                    statusDescription = "Method not allowed";
+                    break;
                 case 409:
                     statusDescription = "Error. The entry already exists";
                     break;

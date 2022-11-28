@@ -30,7 +30,7 @@ namespace MovieReviewAPI.Controllers
 
         // Get based on ReviewId, ShowId, or UserId
         // Specific which in the keyword before the id
-        // GET: api/UserReviews/reviews/5
+        // GET: api/UserReviews/shows/5
         [HttpGet("{type}/{id}")]
         public async Task<ActionResult<UserReviews>> GetUserReviews(string type, int id)
         {
@@ -88,6 +88,10 @@ namespace MovieReviewAPI.Controllers
             if (id != userReviews.ReviewId)
             {
                 return BadRequest(new Response(400));
+            }
+            else if (UserReviewsExists(id))
+            {
+                return NotFound(new Response(404, "User Review"));
             }
 
             _context.Entry(userReviews).State = EntityState.Modified;
@@ -228,7 +232,7 @@ namespace MovieReviewAPI.Controllers
             return NoContent();
         }
 
-        private bool UserReviewsExists(int rid, int sid, int uid)
+        private bool UserReviewsExists(int rid = 0, int sid = 0, int uid = 0)
         {
             return _context.UserReviews.Any(e => e.ReviewId == rid || (e.ShowId == sid && e.UserId == uid));
         }

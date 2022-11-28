@@ -86,7 +86,6 @@ namespace MovieReviewAPI.Controllers
         {
             users.NumOfReviews = 0;
 
-            
             try
             {
                 _context.UserInfo.Add(users);
@@ -114,17 +113,16 @@ namespace MovieReviewAPI.Controllers
             var users = await _context.UserInfo.FindAsync(id);
             if (users == null)
             {
-                return NotFound(new Response(404, "User of User Id" + id));
+                return NotFound(new Response(404, "User of User Id " + id));
             }
 
             // Recalculate AVGUserRating
-            
+            var showids = await _context.UserReviews.Where(c => c.UserId == users.UserId).ToListAsync();
             _context.UserInfo.Remove(users);
 
             await _context.SaveChangesAsync();
 
             // Update all Shows where the user had a review for
-            var showids = await _context.UserReviews.Where(c => c.UserId == users.UserId).ToListAsync();
             if (showids.Any())
             {
                 foreach (var showid in showids)
