@@ -102,7 +102,6 @@ namespace MovieReviewAPI.Controllers
             return CreatedAtAction("GetUserReviews", new { id = users.UserId }, new Response(201, "User Review", users));
         }
 
-        // Does not update AVGUserRating upon deleting a user.
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsers(int id)
@@ -126,18 +125,19 @@ namespace MovieReviewAPI.Controllers
                 foreach (var showid in showids)
                 {
                     var tvshows = await _context.TVShows.FindAsync(showid.ShowId);
-                    var reviews = await _context.UserReviews.Where(c => c.ShowId == showid.ShowId).ToListAsync();
                     if (tvshows != null)
                     {
-                        if (reviews != null && reviews.Count != 0)
+                        var reviews = await _context.UserReviews.Where(c => c.ShowId == showid.ShowId).ToListAsync();
+                        if (reviews != null && reviews.Count > 0)
                         {
-                            tvshows.AVGUserRating = reviews.Sum(c => c.UserRating) / reviews.Count;
+                            tvshows.AVGUserRating = (reviews.Sum(c => c.UserRating) / reviews.Count);
                         }
                         else
                         {
                             tvshows.AVGUserRating = 0;
                         }
                     }
+                    
                 }
             }
 

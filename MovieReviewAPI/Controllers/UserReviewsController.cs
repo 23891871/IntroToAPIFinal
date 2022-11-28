@@ -184,16 +184,18 @@ namespace MovieReviewAPI.Controllers
 
             return CreatedAtAction("GetUserReviews", new { id = userReviews.ReviewId }, new Response(201, "User Review", userReviews));
         }
-
+        // Does not update AVGUserRating properly
         // DELETE: api/UserReviews/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserReviews(int id)
         {
             var userReviews = await _context.UserReviews.FindAsync(id);
+            
             if (userReviews == null)
             {
-                return NotFound(new Response(404, "User Review of User Id "));
+                return NotFound(new Response(404, "User Review of User Id "+id));
             }
+            var show = userReviews.ShowId;
 
             var user = await _context.UserInfo.FindAsync(userReviews.UserId);
             if (user != null)
@@ -202,19 +204,25 @@ namespace MovieReviewAPI.Controllers
             }
 
             _context.UserReviews.Remove(userReviews);
-
+            
             _context.SaveChanges();
 
-            var tvshows = await _context.TVShows.FindAsync(userReviews.ShowId);
-            var reviews = await _context.UserReviews.Where(c => c.ShowId == userReviews.ShowId).ToListAsync();
+            // Update AVGUserRatings in TVShows
+            var tvshows = await _context.TVShows.FindAsync(show);
+            var reviews = await _context.UserReviews.Where(c => c.ShowId == show).ToListAsync();
             if (tvshows != null)
             {
-                if (reviews != null)
+                if (reviews != null && reviews.Count > 0)
                 {
-                    tvshows.AVGUserRating = reviews.Sum(c => c.UserRating) / reviews.Count;
+                    tvshows.AVGUserRating = (reviews.Sum(c => c.UserRating) / reviews.Count);
+                }
+                else
+                {
+                    tvshows.AVGUserRating = 0;
                 }
             }
-
+            // End update
+                
             await _context.SaveChangesAsync();
 
             return NoContent();
