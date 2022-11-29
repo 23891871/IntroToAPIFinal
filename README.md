@@ -4,26 +4,26 @@
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
-| GET | api/TVShows | Returns all TVShows in the database. |
-| GET | api/TVShows/{id} | Returns TVShow of ShowId id. |
-| GET | api/TVShows/genre/{genre} | Returns all TV Shows of a specific genre. |
-| GET | api/TVShows/top/{database}/{num} | Returns top num of TV Shows ordered by ratings in the chosen database from highest to lowest |
-| GET | api/Users | Returns all UserInfo in the database. |
-| GET | api/Users/{id} | Returns Userinfo of UserId id. |
-| GET | api/UserReviews | Returns all UserReviews in the database. |
-| GET | api/UserReviews/{type}/{id} | Returns all UserReviews for ShowId or ReviewId or UserId) type=shows or users. |
-| GET | api/UserReviews/{id} | Returns specific review of a show by a user. |
-| PUT | api/Users/{id} | Update UserName and/or Password; not allowed to update UserId and NumOfUserRatings. |
-| PUT | api/UserReviews/{id} | Update a UserReview except for ReviewId, ShowId, UserId. It updates the NumOfUserRatings from UserInfo and AVGUserRatings from TVShows. |
-| POST | api/Users | Create a User with a UserId, unique Username, Password; not allowed to initialize NumOfUserRatings
-| POST | api/UserReviews | Create a UserReview with ReviewId (optional), ShowId, UserId, UserRating, UserComment (optional). Also updates the table UserInfo the NumOfUserRatings and in TVShows the AVGUserRating. |
-| DELETE | api/TVShows/{id} | Since users should not be able to delete TVShows, it will always return status code 405 method not allowed.
-| DELETE | api/Users/{id} | Delete User with UserId id. Remove all of the user's posts and update the AVGUserRatings in table TVShows. |
-| DELETE | api/UserReviews/{id} | Deletes a particular UserReview with ReviewId id. It updates the NumOfUserRatings from UserInfo and AVGUserRatings from TVShows.
+| GET | `api/TVShows` | Returns all TVShows in the database. |
+| GET | `api/TVShows/{id}` | Returns TVShow of ShowId id. |
+| GET | `api/TVShows/genre/{genre}` | Returns all TV Shows of a specific genre. |
+| GET | `api/TVShows/top/{database}/{num}` | Returns top num of TV Shows ordered by ratings in the chosen database from highest to lowest |
+| GET | `api/Users` | Returns all UserInfo in the database. |
+| GET | `api/Users/{id}` | Returns Userinfo of UserId id. |
+| GET | `api/UserReviews` | Returns all UserReviews in the database. |
+| GET | `api/UserReviews/{type}/{id}` | Returns all UserReviews for ShowId or ReviewId or UserId) type=shows or users. |
+| GET | `api/UserReviews/{id}` | Returns specific review of a show by a user. |
+| PUT | `api/Users/{id}` | Update UserName and/or Password; not allowed to update UserId and NumOfUserRatings. |
+| PUT | `api/UserReviews/{id}` | Update a UserReview except for ReviewId, ShowId, UserId. It updates the NumOfUserRatings from UserInfo and AVGUserRatings from TVShows. |
+| POST | `api/Users` | Create a User with a UserId, unique Username, Password; not allowed to initialize NumOfUserRatings
+| POST | `api/UserReviews` | Create a UserReview with ReviewId (optional), ShowId, UserId, UserRating, UserComment (optional). Also updates the table UserInfo the NumOfUserRatings and in TVShows the AVGUserRating. |
+| DELETE | `api/TVShows/{id}` | Since users should not be able to delete TVShows, it will always return status code 405 method not allowed.
+| DELETE | `api/Users/{id}` | Delete User with UserId id. Remove all of the user's posts and update the AVGUserRatings in table TVShows. |
+| DELETE | `api/UserReviews/{id}` | Deletes a particular UserReview with ReviewId id. It updates the NumOfUserRatings from UserInfo and AVGUserRatings from TVShows.
 
 ## EXPLANATIONS:
 
-### GET: api/TVShows
+### GET: `api/TVShows`
 
 SAMPLE RESPONSE
 
@@ -67,8 +67,8 @@ SAMPLE RESPONSE
 **Explanation: Simply returns all TVShows. There are 22 in total but I removed the other 20.**
 ____________________________________________________________________________
 
-### GET: api/TVShows/{id}
-GOOD SAMPLE RESPONSE ( api/TVShows/2 )
+### GET: `api/TVShows/{id}`
+GOOD SAMPLE RESPONSE `api/TVShows/2`
 
 ```
 {
@@ -91,7 +91,7 @@ GOOD SAMPLE RESPONSE ( api/TVShows/2 )
 }
 ```
 
-BAD SAMPLE RESPONSE ( api/TVShows/40 )
+BAD SAMPLE RESPONSE `api/TVShows/40`
 
 ```
 {
@@ -106,7 +106,7 @@ ____________________________________________________________________________
 
 ### GET: api/TVShows/top/{database}/{num}
 
-GOOD SAMPLE RESPONSE ( api/TVShows/top/IMDB/5 )
+GOOD SAMPLE RESPONSE `api/TVShows/top/IMDB/5`
 ```
 {
     "statusCode": 200,
@@ -186,7 +186,7 @@ GOOD SAMPLE RESPONSE ( api/TVShows/top/IMDB/5 )
 }
 ```
 
-BAD SAMPLE RESPONSE ( api/TVShows/top/FAKEDB/2 )
+BAD SAMPLE RESPONSE `api/TVShows/top/FAKEDB/2`
 
 ```
 {
@@ -200,9 +200,9 @@ BAD SAMPLE RESPONSE ( api/TVShows/top/FAKEDB/2 )
 
 ____________________________________________________________________________
 
-### GET: api/TVShows/genre/{genre}
+### GET: `api/TVShows/genre/{genre}`
 
-GOOD SAMPLE RESPONSE ( api/TVShows/genre/Superhero )
+GOOD SAMPLE RESPONSE `api/TVShows/genre/Superhero`
 
 ```
 {
@@ -255,7 +255,7 @@ GOOD SAMPLE RESPONSE ( api/TVShows/genre/Superhero )
 }
 ```
 
-BAD SAMPLE RESPONSE ( api/TVShows/genre/TEST )
+BAD SAMPLE RESPONSE `api/TVShows/genre/TEST`
 
 ```
 {
@@ -267,7 +267,8 @@ BAD SAMPLE RESPONSE ( api/TVShows/genre/TEST )
 
 ____________________________________________________________________________
 
-### GET: api/Users
+### GET: `api/Users`
+
 SAMPLE RESPONSE
 
 ```
@@ -299,8 +300,9 @@ SAMPLE RESPONSE
 
 ____________________________________________________________________________
 
-### GET: api/Users/{id}
-GOOD SAMPLE RESPONSE ( api/Users/1 )
+### GET: `api/Users/{id}`
+
+GOOD SAMPLE RESPONSE `api/Users/1`
 
 ```
 {
@@ -315,7 +317,7 @@ GOOD SAMPLE RESPONSE ( api/Users/1 )
 }
 ```
 
-BAD SAMPLE RESPONSE ( api/Users/11 )
+BAD SAMPLE RESPONSE `api/Users/11`
 
 ```
 {
@@ -327,7 +329,8 @@ BAD SAMPLE RESPONSE ( api/Users/11 )
 
 ____________________________________________________________________________
 
-### GET: api/UserReviews
+### GET: `api/UserReviews`
+
 SAMPLE RESPONSE
 
 ```
@@ -362,8 +365,9 @@ SAMPLE RESPONSE
 
 ____________________________________________________________________________
 
-### GET: api/UserReviews/{type}/{id}
-GOOD SAMPLE RESPONSE ( api/UserReviews/shows/2 )
+### GET: `api/UserReviews/{type}/{id}`
+
+GOOD SAMPLE RESPONSE `api/UserReviews/shows/2`
 
 ```
 {
@@ -388,7 +392,7 @@ GOOD SAMPLE RESPONSE ( api/UserReviews/shows/2 )
 }
 ```
 
-BAD SAMPLE RESPONSE ( api/UserReviews/shows/3 )
+BAD SAMPLE RESPONSE `api/UserReviews/shows/3`
 
 ```
 {
@@ -400,8 +404,9 @@ BAD SAMPLE RESPONSE ( api/UserReviews/shows/3 )
 
 ____________________________________________________________________________
 
-### GET: api/UserReviews/{id}
-GOOD SAMPLE RESPONSE ( api/UserReviews/8 )
+### GET: `api/UserReviews/{id}`
+
+GOOD SAMPLE RESPONSE `api/UserReviews/8`
 
 ```
 {
@@ -417,7 +422,7 @@ GOOD SAMPLE RESPONSE ( api/UserReviews/8 )
 }
 ```
 
-BAD SAMPLE RESPONSE ( api/UserReviews/3 )
+BAD SAMPLE RESPONSE `api/UserReviews/3`
 
 ```
 {
@@ -428,8 +433,9 @@ BAD SAMPLE RESPONSE ( api/UserReviews/3 )
 ```
 ____________________________________________________________________________
 
-### PUT: api/Users/{id}
-GOOD SAMPLE BODY ( api/Users/1 )
+### PUT: `api/Users/{id}`
+
+GOOD SAMPLE BODY `api/Users/1`
 
 ```
 {
@@ -442,15 +448,15 @@ GOOD SAMPLE BODY ( api/Users/1 )
 
 GOOD SAMPLE RESPONSE
 
-```(Nothing but Code 204 from Postman)```
+*Nothing but Code 204 from Postman*
 
 **Explanation: If a username is the same as an existing one, the request will still be valid, but username won't change.**
 
 ____________________________________________________________________________
 
-### PUT: api/UserReviews/{id}
+### PUT: `api/UserReviews/{id}`
 
-GOOD SAMPLE BODY ( api/UserReviews/8 )
+GOOD SAMPLE BODY `api/UserReviews/8`
 
 ```
 {
@@ -464,9 +470,9 @@ GOOD SAMPLE BODY ( api/UserReviews/8 )
 
 GOOD SAMPLE RESPONSE
 
-```(Nothing but Code 204 from Postman)```
+*Nothing but Code 204 from Postman*
 
-BAD SAMPLE BODY ( api/userreviews/5 )
+BAD SAMPLE BODY `api/userreviews/5`
 
 ```
 {
@@ -491,7 +497,7 @@ BAD SAMPLE RESPONSE
 **Explanation: Since reviewId 5 existed, the request was invalid. However, if a UserReview of ReviewId5 existed, the response would match the good sample response, but the ReviewId would not be changed.**
 ____________________________________________________________________________
 
-### POST: api/Users
+### POST: `api/Users`
 GOOD SAMPLE BODY
 
 ```
@@ -545,7 +551,7 @@ BAD SAMPLE RESPONSE
 ____________________________________________________________________________
 
 
-### POST: api/UserReviews
+### POST: `api/UserReviews`
 
 GOOD SAMPLE BODY
 
@@ -600,9 +606,9 @@ BAD SAMPLE RESPONSE
 not provided the id will increment starting from the previously entered ReviewId (so if the last entered is 10, next is 11).**
 ____________________________________________________________________________
 
-### DELETE: api/TVShows/{id}
+### DELETE: `api/TVShows/{id}`
 
-BAD SAMPLE RESPONSE ONLY ( api/TVShows/2 )
+BAD SAMPLE RESPONSE ONLY `api/TVShows/2`
 
 ```
 {
@@ -615,13 +621,13 @@ BAD SAMPLE RESPONSE ONLY ( api/TVShows/2 )
 **Explanation: Method not implemented, but was autogenerated so I set it to not be allowed. Additionally, users should not be able to remove TVShows.**
 ____________________________________________________________________________
 
-### DELETE: api/Users/{id}
+### DELETE: `api/Users/{id}`
 
-GOOD SAMPLE RESPONSE ( api/Users/3 )
+GOOD SAMPLE RESPONSE `api/Users/3`
 
-```(Nothing but Code 204 from Postman. Also removed all of the user's posts and updated the AVGUserRatings in table TVShows)```
+*Nothing but Code 204 from Postman. Also removed all of the user's posts and updated the AVGUserRatings in table TVShows*
 
-BAD SAMPLE RESPONSE ( api/Users/11 )
+BAD SAMPLE RESPONSE `api/Users/11`
 
 ```
 {
@@ -633,13 +639,13 @@ BAD SAMPLE RESPONSE ( api/Users/11 )
 
 ____________________________________________________________________________
 
-DELETE: api/UserReviews/{rid}                        (Deletes a particular UserReview with rid=ReviewId. It updates the NumOfUserRatings
-                                                        from UserInfo and AVGUserRatings from TVShows)
-GOOD SAMPLE RESPONSE ( api/userreviews/8 )
+### DELETE: `api/UserReviews/{rid}`
 
-```(Nothing but Code 204 from Postman. Also other necessary values are removed/updated)```
+GOOD SAMPLE RESPONSE `api/userreviews/8`
 
-BAD SAMPLE RESPONSE ( api/userreviews/5 )
+*Nothing but Code 204 from Postman. Also other necessary values are removed/updated*
+
+BAD SAMPLE RESPONSE `api/userreviews/5`
 
 ```
 {
