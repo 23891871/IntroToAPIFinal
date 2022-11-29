@@ -639,7 +639,7 @@ BAD SAMPLE RESPONSE `api/Users/11`
 
 ____________________________________________________________________________
 
-### DELETE: `api/UserReviews/{rid}`
+### DELETE: `api/UserReviews/{id}`
 
 GOOD SAMPLE RESPONSE `api/userreviews/8`
 
