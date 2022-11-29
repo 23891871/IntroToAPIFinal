@@ -1,66 +1,98 @@
 # IntroToAPIFinal
-Endpoints:
-GET: api/TVShows                                     (Returns all TVShows in the database)
-GET: api/TVShows/top/{database}/{num}                (Returns top num of TV Shows ordered by ratings in the chosen database; Highest to lowest)
-GET: api/TVShows/{id}                                (Returns TVShow of ShowId id)
-GET: api/TVShows/genre/{genre}                       (Returns all TV Shows of a specific genre)
-GET: api/Users                                       (Returns all UserInfo in the database)
-GET: api/Users/{id}                                  (Returns Userinfo of UserId id)
-GET: api/UserReviews                                 (Returns all UserReviews in the database)
-GET: api/UserReviews/{type}/{id}                     (Returns all UserReviews for ShowId or ReviewId or UserId) type=shows or users
-GET: api/UserReviews/{id}                           (Returns specific review of a show by a user)
 
-PUT: api/Users/{id}                                  (Update UserName and/or Password; not allowed to update UserId and NumOfUserRatings)
-PUT: api/UserReviews/{rid}                           (Update a UserReview except for ReviewId, ShowId, UserId. It updates the NumOfUserRatings
-                                                        from UserInfo and AVGUserRatings from TVShows)
-POST: api/Users                                      (Create a User with a UserId, unique Username, Password; not allowed to initialize NumOfUserRatings)
-POST: api/UserReviews                                (Create a UserReview with ReviewId (optional), ShowId, UserId, UserRating, UserComment (optional))
-                                                       (Also updates the table UserInfo the NumOfUserRatings and in TVShows the AVGUserRating)
+## Endpoints:
 
-DELETE: api/Users/{id}                               (Delete User with UserId id. Remove all of the user's posts and update the AVGUserRatings in table TVShows)
-DELETE: api/UserReviews/{rid}                        (Deletes a particular UserReview with rid=ReviewId. It updates the NumOfUserRatings
-                                                        from UserInfo and AVGUserRatings from TVShows)
-____________________________________________________________________________
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | api/TVShows | Returns all TVShows in the database. |
+| GET | api/TVShows/{id} | Returns TVShow of ShowId id. |
+| GET | api/TVShows/genre/{genre} | Returns all TV Shows of a specific genre. |
+| GET | api/TVShows/top/{database}/{num} | Returns top num of TV Shows ordered by ratings in the chosen database from highest to lowest |
+| GET | api/Users | Returns all UserInfo in the database. |
+| GET | api/Users/{id} | Returns Userinfo of UserId id. |
+| GET | api/UserReviews | Returns all UserReviews in the database. |
+| GET | api/UserReviews/{type}/{id} | Returns all UserReviews for ShowId or ReviewId or UserId) type=shows or users. |
+| GET | api/UserReviews/{id} | Returns specific review of a show by a user. |
+| PUT | api/Users/{id} | Update UserName and/or Password; not allowed to update UserId and NumOfUserRatings. |
+| PUT | api/UserReviews/{id} | Update a UserReview except for ReviewId, ShowId, UserId. It updates the NumOfUserRatings from UserInfo and AVGUserRatings from TVShows. |
+| POST | api/Users | Create a User with a UserId, unique Username, Password; not allowed to initialize NumOfUserRatings
+| POST | api/UserReviews | Create a UserReview with ReviewId (optional), ShowId, UserId, UserRating, UserComment (optional). Also updates the table UserInfo the NumOfUserRatings and in TVShows the AVGUserRating. |
+| DELETE | api/Users/{id} | Delete User with UserId id. Remove all of the user's posts and update the AVGUserRatings in table TVShows. |
+| DELETE | api/UserReviews/{id} | Deletes a particular UserReview with ReviewId id. It updates the NumOfUserRatings from UserInfo and AVGUserRatings from TVShows.
 
+## EXPLANATIONS:
 
-EXPLANATIONS:
+#### GET: api/TVShows
 
-GET: api/TVShows                                     (Returns all TVShows in the database)
-SAMPLE RESPONSE:
+SAMPLE RESPONSE
 {
+
     "statusCode": 200,
+    
     "statusDescription": "Successfully retrieved TVShows",
+    
     "result": [
+    
         {
+        
             "showId": 1,
+            
             "showName": "The Flash",
+            
             "showDesc": "After being struck by lightning, Barry Allen wakes up from his coma to discover he's been given the power of super speed, becoming the Flash, and fighting crime in Central City.",
+            
             "genre": "Superhero",
+            
             "numSeasons": 8,
+            
             "numEpisodes": 171,
+            
             "episodeLength": 43,
+            
             "yearReleased": 2014,
+            
             "ongoing": true,
+            
             "rTrating": 0.89,
+            
             "imdBrating": 7.6,
+            
             "avgUserRating": 0
+            
         },
+        
         {
+        
             "showId": 2,
+            
             "showName": "Criminal Minds",
+            
             "showDesc": "The cases of the F.B.I. Behavioral Analysis Unit (B.A.U.), an elite group of profilers who analyze the nation's most dangerous serial killers and individual heinous crimes in an effort to anticipate their next moves before they strike again.",
+            
             "genre": "Crime Drama",
+            
             "numSeasons": 16,
+            
             "numEpisodes": 326,
+            
             "episodeLength": 42,
+            
             "yearReleased": 2005,
+            
             "ongoing": false,
+            
             "rTrating": 0.85,
+            
             "imdBrating": 8.1,
+            
             "avgUserRating": 0
+            
         }
+        
     ]
+    
 }
+
 ____________________________________________________________________________
 
 GET: api/TVShows/{id}                                (Returns TVShow of ShowId id)
